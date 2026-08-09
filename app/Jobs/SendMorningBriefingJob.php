@@ -70,7 +70,7 @@ class SendMorningBriefingJob implements ShouldQueue
             ->orderByDesc('trips')
             ->first();
 
-        // Not enough signal to write anything useful — skip silently.
+        // Not enough signal to write anything useful, skip silently.
         if (!$anchor && (!$frequent || $frequent->trips < 3)) return null;
 
         $parts = [];
@@ -87,7 +87,7 @@ class SendMorningBriefingJob implements ShouldQueue
             if ($condition && $temp !== null) {
                 $line = "{$condition}, " . round((float) $temp) . "°C";
                 if ($rain !== null && (int) $rain >= 40) {
-                    $line .= " — {$rain}% chance of rain, carry an umbrella";
+                    $line .= ", {$rain}% chance of rain, carry an umbrella";
                 }
                 $parts[] = $line;
             }

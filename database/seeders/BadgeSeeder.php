@@ -50,7 +50,7 @@ class BadgeSeeder extends Seeder
             [
                 'slug'              => 'photo_pro',
                 'name'              => 'Photo Pro',
-                'description'       => 'Added 20 stop photos — a visual guide for every commuter in Nairobi.',
+                'description'       => 'Added 20 stop photos, a visual guide for every commuter in Nairobi.',
                 'icon'              => 'camera',
                 'color'             => '#7C3AED',
                 'requirement_type'  => 'type_count',

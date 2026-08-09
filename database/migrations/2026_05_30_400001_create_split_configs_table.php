@@ -11,11 +11,11 @@ return new class extends Migration
         Schema::create('split_configs', function (Blueprint $table) {
             $table->id();
 
-            // One config per operator agency — no global default
+            // One config per operator agency, no global default
             $table->string('agency_id', 255)->unique();
             $table->foreign('agency_id')->references('agency_id')->on('agencies')->cascadeOnDelete();
 
-            // Master toggle — when false the full gross (minus 3% platform) goes to vehicle wallet
+            // Master toggle, when false the full gross (minus 3% platform) goes to vehicle wallet
             $table->boolean('split_enabled')->default(true);
 
             // 'percentage' → vehicle_pct + sacco_pct + platform_pct split per transaction

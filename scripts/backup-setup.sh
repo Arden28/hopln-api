@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Hopln — one-time backup setup
+# Hopln, one-time backup setup
 # Run this once on the server to install rclone, configure R2, create the
 # backup bucket, make the log file, and register the daily cron job.
 #
@@ -33,7 +33,7 @@ set +a
 for var in CLOUDFLARE_R2_ACCESS_KEY_ID CLOUDFLARE_R2_SECRET_ACCESS_KEY CLOUDFLARE_R2_ENDPOINT DB_USERNAME DB_PASSWORD DB_DATABASE; do
   [ -n "${!var:-}" ] || { echo "ERROR: ${var} is not set in .env"; exit 1; }
 done
-echo "✓ .env loaded — R2 and DB credentials found"
+echo "✓ .env loaded, R2 and DB credentials found"
 
 # ── Step 2: Install rclone ────────────────────────────────────────────────────
 echo ""

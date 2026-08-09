@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            // RBAC — must run before AdminSeeder so the superadmin role exists
+            // RBAC, must run before AdminSeeder so the superadmin role exists
             PermissionSeeder::class,
             RoleSeeder::class,
             AdminSeeder::class,

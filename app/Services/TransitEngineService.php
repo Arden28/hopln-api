@@ -92,9 +92,9 @@ class TransitEngineService
 
         $result = $this->fetchFromOtp($fromLat, $fromLng, $toLat, $toLng, $resolvedDate, $resolvedTime, $walkReluctance, $maxWalkDistance);
 
-        // Only cache a real response (including empty []). Do not cache null — null means
+        // Only cache a real response (including empty []). Do not cache null, null means
         // OTP is unreachable and the instance may recover before the TTL expires.
-        // Fare data is NOT cached here — it is applied fresh on every read so that
+        // Fare data is NOT cached here, it is applied fresh on every read so that
         // modifier changes (peak-hours, events) reflect within their 60-second cache window.
         if ($result !== null) {
             Cache::put($cacheKey, $result, $this->otpCacheTtl);
@@ -136,14 +136,14 @@ class TransitEngineService
 
             if (!$response->successful()) {
                 Log::warning('OTP returned non-2xx response', ['status' => $response->status()]);
-                // Treat a bad response as unavailable — caller will surface a 503.
+                // Treat a bad response as unavailable, caller will surface a 503.
                 return null;
             }
 
             $body        = $response->json();
             $itineraries = $body['plan']['itineraries'] ?? [];
 
-            // Empty itineraries means OTP is up but found no valid route — not the same as down.
+            // Empty itineraries means OTP is up but found no valid route, not the same as down.
             if (empty($itineraries)) {
                 return [];
             }
@@ -264,7 +264,7 @@ class TransitEngineService
             $encoded  = $leg['legGeometry']['points'] ?? '';
             $otpCoords = $encoded ? $this->decodePolyline($encoded) : [];
 
-            // Community landmark for the boarding stop — "Kencom, in front of
+            // Community landmark for the boarding stop, "Kencom, in front of
             // Hilton" beats coordinates at informal stages.
             $fromLandmark = null;
             if ($isTransit) {
@@ -278,7 +278,7 @@ class TransitEngineService
                         $fromLandmark = Stop::where('name', $fromName)->value('landmark');
                     }
                 } catch (Exception $e) {
-                    // Landmark is decorative — never block routing on it.
+                    // Landmark is decorative, never block routing on it.
                 }
             }
 

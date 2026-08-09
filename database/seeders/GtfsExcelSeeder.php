@@ -97,7 +97,7 @@ class GtfsExcelSeeder extends Seeder
     //     foreach (array_keys($seen) as $id) {
     //         $rows[] = [
     //             'agency_id'       => $id,
-    //             'agency_name'     => $id,          // placeholder — update via Agencies console
+    //             'agency_name'     => $id,          // placeholder, update via Agencies console
     //             'agency_url'      => 'https://hopln.app',
     //             'agency_timezone' => 'Africa/Nairobi',
     //             'agency_lang'     => 'en',
@@ -108,7 +108,7 @@ class GtfsExcelSeeder extends Seeder
     //         ];
     //     }
 
-    //     // Only insert new agencies — preserve names already set by AgencySeeder / admins
+    //     // Only insert new agencies, preserve names already set by AgencySeeder / admins
     //     DB::table('agencies')->upsert(
     //         $rows,
     //         ['agency_id'],

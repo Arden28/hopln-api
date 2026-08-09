@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Hopln API — deploy script.
+# Hopln API, deploy script.
 # Called by GitHub Actions over SSH as the 'deploy' user.
-# Rebuilds app + queue images only — postgres/redis/otp/caddy are NOT touched.
+# Rebuilds app + queue images only, postgres/redis/otp/caddy are NOT touched.
 
 set -euo pipefail
 

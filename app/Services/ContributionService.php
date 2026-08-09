@@ -119,7 +119,7 @@ class ContributionService
                 $user->id,
                 'points_earned',
                 'Contribution approved 🎉',
-                "\"{$contribution->title}\" was approved — +{$points} Safiri Points",
+                "\"{$contribution->title}\" was approved, +{$points} Safiri Points",
                 ['screen' => '/(tabs)/contribution'],
             )->onQueue('default');
         }
@@ -127,7 +127,7 @@ class ContributionService
 
     /**
      * Write approved stop edits through to the stops table. Currently applies
-     * community landmarks ("in front of Hilton") — the field that powers
+     * community landmarks ("in front of Hilton"), the field that powers
      * landmark-based boarding instructions.
      */
     private function applyApprovedEdit(Contribution $contribution): void
@@ -160,13 +160,13 @@ class ContributionService
         if ($user) {
             $body = $reason
                 ? "Reason: {$reason}"
-                : "It didn't meet our accuracy standards — keep contributing!";
+                : "It didn't meet our accuracy standards, keep contributing!";
 
             SendPushNotificationJob::dispatch(
                 $user->id,
                 'points_earned', // reuses the same opt-in toggle (contribution outcomes)
                 'Contribution not approved',
-                "\"{$contribution->title}\" — {$body}",
+                "\"{$contribution->title}\", {$body}",
                 ['screen' => '/(tabs)/contribution'],
             )->onQueue('default');
         }

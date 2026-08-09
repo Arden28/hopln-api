@@ -87,14 +87,14 @@ class SaccoMemberController extends Controller
         return response()->json($member, 201);
     }
 
-    /** GET /members/me/fees — returns fee history for the authenticated member. */
+    /** GET /members/me/fees, returns fee history for the authenticated member. */
     public function meeFees(Request $request): JsonResponse
     {
         $member = SaccoMember::where('user_id', $request->user()->id)->firstOrFail();
         return response()->json($member->fees()->orderBy('paid_at', 'desc')->get());
     }
 
-    /** GET /members/me — returns the authenticated member's own record. */
+    /** GET /members/me, returns the authenticated member's own record. */
     public function me(Request $request): JsonResponse
     {
         $member = SaccoMember::where('user_id', $request->user()->id)
@@ -106,7 +106,7 @@ class SaccoMemberController extends Controller
         return response()->json($member);
     }
 
-    /** POST /members/{member}/account — creates a console user account for this member. */
+    /** POST /members/{member}/account, creates a console user account for this member. */
     public function createAccount(Request $request, SaccoMember $member): JsonResponse
     {
         $this->assertAgencyAllowed($request, $member->agency_id);

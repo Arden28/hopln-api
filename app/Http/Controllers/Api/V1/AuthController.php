@@ -34,7 +34,7 @@ class AuthController extends Controller
             'phone_number' => $data['phone_number'],
         ]);
 
-        // [PHONE VERIFICATION DISABLED] — re-enable block below and remove token line to restore
+        // [PHONE VERIFICATION DISABLED], re-enable block below and remove token line to restore
         // $this->otp->generate($user->phone_number, 'phone_verification');
         // return response()->json(['needs_phone_verification' => true, 'phone' => $user->phone_number], 201);
 
@@ -56,7 +56,7 @@ class AuthController extends Controller
             return response()->json(['message' => 'Invalid credentials.'], 401);
         }
 
-        // [PHONE VERIFICATION DISABLED] — uncomment block below to restore
+        // [PHONE VERIFICATION DISABLED], uncomment block below to restore
         // if (!$user->isPhoneVerified()) {
         //     if (!$user->phone_number) {
         //         return response()->json(['message' => 'No phone number on this account.', 'needs_phone_setup' => true], 403);

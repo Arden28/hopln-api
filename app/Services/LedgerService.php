@@ -164,7 +164,7 @@ class LedgerService
 
                 if ($vehicleWallet->balance >= $levy) {
                     $this->debitWallet($vehicleWallet,  $levy, null, 'Daily SACCO levy', $createdBy);
-                    $this->creditWallet($saccoWallet,   $levy, null, "Daily levy — vehicle #{$vehicle->id}", $createdBy);
+                    $this->creditWallet($saccoWallet,   $levy, null, "Daily levy, vehicle #{$vehicle->id}", $createdBy);
                     $results[] = ['vehicle_id' => $vehicle->id, 'amount' => $levy, 'status' => 'applied'];
                 } else {
                     $results[] = ['vehicle_id' => $vehicle->id, 'amount' => $levy, 'status' => 'insufficient_balance'];

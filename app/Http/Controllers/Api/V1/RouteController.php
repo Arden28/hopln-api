@@ -53,7 +53,7 @@ class RouteController extends Controller
 
         // null = OTP is down or unreachable (distinct from an empty result set).
         if ($routes === null) {
-            Log::warning('OTP unavailable — returning 503 to client.');
+            Log::warning('OTP unavailable, returning 503 to client.');
             return response()->json([
                 'message' => 'Route planning is temporarily unavailable. Please try again in a moment.',
                 'code'    => 'OTP_UNAVAILABLE',
@@ -89,7 +89,7 @@ class RouteController extends Controller
                 'numItineraries'  => 1,
             ]);
         } catch (\Throwable) {
-            // Warm-up is best-effort — ignore failures
+            // Warm-up is best-effort, ignore failures
         }
         return response()->json(['ok' => true]);
     }

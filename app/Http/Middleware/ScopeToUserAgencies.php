@@ -20,7 +20,7 @@ class ScopeToUserAgencies
         $user = $request->user();
 
         if ($user && $user->hasAnyRole(['superadmin', 'hopln_admin', 'hopln_staff'])) {
-            // Global access — no restriction
+            // Global access, no restriction
             $request->merge(['_agency_scope' => null]);
         } elseif ($user) {
             $request->merge([

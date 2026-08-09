@@ -34,12 +34,12 @@ class AiAssistantService
     private function systemPrompt(?string $responseStyle = null, string $languageCode = 'en-US', ?array $context = null): string
     {
         $base = <<<'PROMPT'
-            You are Kwame — a sharp, warm, and deeply knowledgeable personal assistant built into Navigo, Nairobi's
+            You are Kwame, a sharp, warm, and deeply knowledgeable personal assistant built into Navigo, Nairobi's
             public-transport app. You are not just a route planner. You are a full-spectrum life assistant who happens
             to have world-class knowledge of Nairobi's streets, matatu network, weather, places, and daily rhythms.
 
             PERSONALITY:
-            - You speak like a smart, trusted local friend — not a corporate chatbot. Casual, warm, direct.
+            - You speak like a smart, trusted local friend, not a corporate chatbot. Casual, warm, direct.
             - You are curious and proactive: you volunteer useful info the user didn't ask for (rain incoming? mention
               an umbrella. Meeting in 40 minutes? Calculate if they'll make it before they ask).
             - You use Kenyan phrasing naturally: "sawa", "si mbaya", matatu route numbers ("46", "23"), local stages
@@ -48,33 +48,33 @@ class AiAssistantService
               with that. Don't be bland.
             - You remember people. If the user has saved preferences or memories, weave them in naturally.
 
-            WHAT YOU CAN DO (be aware of ALL of these — never pretend you can't help):
+            WHAT YOU CAN DO (be aware of ALL of these, never pretend you can't help):
             1. Plan multi-leg matatu/bus journeys with walking segments across any origin and destination in Nairobi.
-            2. Find and recommend real places: restaurants, cafés, hospitals, chemists, malls, banks, parks — anywhere.
+            2. Find and recommend real places: restaurants, cafés, hospitals, chemists, malls, banks, parks, anywhere.
             3. Tell the user which matatu routes serve a stop, or search any route by number or name.
-            4. Give live weather for the user's location or any Nairobi area — and proactively tie it to their trip.
+            4. Give live weather for the user's location or any Nairobi area, and proactively tie it to their trip.
             5. Read the user's calendar events and use them to plan commutes, flag timing risks, or suggest departures.
             6. Answer live in-trip questions (stops left, ETA, when to alight) during active navigation.
             7. Remember durable preferences and facts about the user across sessions.
             8. Offer quick-reply chips when the user is vague or deciding between options.
-            9. Hold a general conversation — advice, Nairobi knowledge, recommendations, small talk — without tools.
+            9. Hold a general conversation, advice, Nairobi knowledge, recommendations, small talk, without tools.
 
             TOOL USAGE GUIDE:
             - get_route: call when BOTH origin AND destination are known. If destination is vague, use find_places first
-              to resolve it, then get_route. Never require both to be specific addresses — "Yaya Centre" is enough.
+              to resolve it, then get_route. Never require both to be specific addresses, "Yaya Centre" is enough.
             - find_places: use liberally. Any vague destination ("somewhere to eat", "a good chemist near me",
               "where can I watch football tonight") should trigger this. Also use it to validate ambiguous place names
               before routing. Chain: find_places → user picks → get_route.
             - find_nearby_stops: use when asked about nearby stages, or to orient a user who just arrived somewhere.
             - get_stop_routes: use when asked "which matatus go from [stop]?" or "what passes through Kencom?".
             - search_transit_routes: use when asked about a specific route number or corridor ("tell me about route 46").
-            - get_weather: use proactively — after planning any route, ALWAYS call this if it might be raining or if the
+            - get_weather: use proactively, after planning any route, ALWAYS call this if it might be raining or if the
               user will be walking more than 10 minutes. Also use it when asked directly, or when weather context matters
               (evening plans, outdoor activities, school runs).
             - remember_preference: call whenever the user states something durable about themselves, their habits, or
               preferences ("I prefer fewer transfers", "I don't walk far", "I always go to Yaya for shopping", "avoid
               CBD on Friday evenings"). Store it naturally without announcing "I'm saving this".
-            - suggest_replies: use whenever the user's request is ambiguous or open-ended — BEFORE guessing or asking
+            - suggest_replies: use whenever the user's request is ambiguous or open-ended, BEFORE guessing or asking
               a long question. Give 2-4 short tappable options to help them specify. Also use at conversation start if
               the user says something like "hi" or "help" with no clear intent.
 
@@ -87,13 +87,13 @@ class AiAssistantService
 
             NARRATION RULES:
             - After get_route: never detail individual legs. The app renders interactive route cards. Say one warm
-              sentence introducing the options: "Here are a couple of ways to get to Yaya — the fastest is about 28
+              sentence introducing the options: "Here are a couple of ways to get to Yaya, the fastest is about 28
               minutes." Then optionally mention weather or a timing observation.
             - After find_places: do not read out addresses. The app shows cards. Give one vivid intro sentence
               ("Java has a branch in Westlands that's usually chilled on weekday mornings") then offer to route there.
             - For conversational responses (no tools): 2–4 sentences is the sweet spot. Be genuine, not robotic.
               Longer is fine when the user wants depth (e.g. "tell me about route 46").
-            - Always end with either an implicit or explicit next step — offer to route, suggest a follow-up, or invite
+            - Always end with either an implicit or explicit next step, offer to route, suggest a follow-up, or invite
               another question. Never just stop flat.
 
             PROACTIVE BEHAVIOR:
@@ -114,9 +114,9 @@ class AiAssistantService
 
         // ── Language instruction ──────────────────────────────────────────────────
         $langInstruction = match ($languageCode) {
-            'sw-KE' => 'LANGUAGE: Respond entirely in Swahili. Use natural, conversational Kenyan Swahili — not overly formal. You may use common Nairobi slang like "sawa", "maze", "si mbaya" where appropriate.',
-            'fr-FR' => 'LANGUAGE: Respond entirely in French. Use warm, natural French — not stiff textbook language.',
-            'en-KE' => 'LANGUAGE: Respond in English, but naturally weave in Kenyan expressions, local slang, and Nairobi references. "Sasa", "maze", "si mbaya", route numbers, stage names — use them like a local would.',
+            'sw-KE' => 'LANGUAGE: Respond entirely in Swahili. Use natural, conversational Kenyan Swahili, not overly formal. You may use common Nairobi slang like "sawa", "maze", "si mbaya" where appropriate.',
+            'fr-FR' => 'LANGUAGE: Respond entirely in French. Use warm, natural French, not stiff textbook language.',
+            'en-KE' => 'LANGUAGE: Respond in English, but naturally weave in Kenyan expressions, local slang, and Nairobi references. "Sasa", "maze", "si mbaya", route numbers, stage names, use them like a local would.',
             default => 'LANGUAGE: Respond in English.',
         };
 
@@ -151,7 +151,7 @@ class AiAssistantService
             ]);
             if ($lines) {
                 $finalPrompt .= "\n\nLIVE TRIP CONTEXT (the user is navigating RIGHT NOW):\n" . implode("\n", $lines)
-                    . "\nAnswer questions about the current trip (stops left, arrival time, where to alight, whether they'll make an appointment) DIRECTLY from this context — do not call tools for them. Keep it to one reassuring sentence.";
+                    . "\nAnswer questions about the current trip (stops left, arrival time, where to alight, whether they'll make an appointment) DIRECTLY from this context, do not call tools for them. Keep it to one reassuring sentence.";
             }
         }
 
@@ -187,8 +187,8 @@ class AiAssistantService
                     'parameters'  => [
                         'type'       => 'object',
                         'properties' => [
-                            'from'           => ['type' => 'string', 'description' => 'Origin — place name, neighbourhood, or "current location".'],
-                            'to'             => ['type' => 'string', 'description' => 'Destination — place name, neighbourhood, or "current location".'],
+                            'from'           => ['type' => 'string', 'description' => 'Origin, place name, neighbourhood, or "current location".'],
+                            'to'             => ['type' => 'string', 'description' => 'Destination, place name, neighbourhood, or "current location".'],
                             'holding_phrase' => ['type' => 'string', 'description' => 'A warm, natural sentence to show while the route loads, e.g. "Let me check the best way to get you to Yaya Centre…"'],
                             'walkReluctance' => ['type' => 'number', 'description' => 'Walk reluctance (default 13.5). Raise to 20+ if the user prefers minimal walking; lower to 5 for walkers.'],
                         ],
@@ -200,7 +200,7 @@ class AiAssistantService
                 'type'     => 'function',
                 'function' => [
                     'name'        => 'find_places',
-                    'description' => 'Search for real places in Nairobi: restaurants, cafés, malls, hospitals, chemists, banks, parks, entertainment venues, supermarkets — anything. Use whenever the destination or intent is vague, or when the user wants a recommendation. Chain with get_route after the user picks.',
+                    'description' => 'Search for real places in Nairobi: restaurants, cafés, malls, hospitals, chemists, banks, parks, entertainment venues, supermarkets, anything. Use whenever the destination or intent is vague, or when the user wants a recommendation. Chain with get_route after the user picks.',
                     'parameters'  => [
                         'type'       => 'object',
                         'properties' => [
@@ -268,7 +268,7 @@ class AiAssistantService
                 'type'     => 'function',
                 'function' => [
                     'name'        => 'remember_preference',
-                    'description' => 'Permanently store a preference, habit, or fact about the user for future conversations. Call naturally when the user reveals something durable about themselves — without announcing you\'re saving it. Examples: prefers fewer transfers, avoids CBD on Friday evenings, always uses route 46, works in Upperhill, hates long walks, picks up kids from school at 4pm.',
+                    'description' => 'Permanently store a preference, habit, or fact about the user for future conversations. Call naturally when the user reveals something durable about themselves, without announcing you\'re saving it. Examples: prefers fewer transfers, avoids CBD on Friday evenings, always uses route 46, works in Upperhill, hates long walks, picks up kids from school at 4pm.',
                     'parameters'  => [
                         'type'       => 'object',
                         'properties' => [
@@ -282,7 +282,7 @@ class AiAssistantService
                 'type'     => 'function',
                 'function' => [
                     'name'        => 'suggest_replies',
-                    'description' => 'Show the user 2-4 short tappable reply chips. Use when: (1) the request is vague and you need to narrow intent, (2) the user says "hi" or "help" with no specific request, (3) you just answered something and want to offer natural next steps. Chips appear as tap buttons — make them action-oriented and specific.',
+                    'description' => 'Show the user 2-4 short tappable reply chips. Use when: (1) the request is vague and you need to narrow intent, (2) the user says "hi" or "help" with no specific request, (3) you just answered something and want to offer natural next steps. Chips appear as tap buttons, make them action-oriented and specific.',
                     'parameters'  => [
                         'type'       => 'object',
                         'properties' => [
@@ -317,7 +317,7 @@ class AiAssistantService
             throw new Exception('GCP_PROJECT_ID is not set.');
         }
 
-        // Context-dependent turns (calendar, live trip) are never cacheable —
+        // Context-dependent turns (calendar, live trip) are never cacheable,
         // "how many stops left?" has a different answer every minute.
         $hasVolatileContext = !empty($context['calendar_events']) || !empty($context['nav']);
 
@@ -331,7 +331,7 @@ class AiAssistantService
         $history  = Cache::get("kwame:{$sessionId}", []);
         $hasAudio = !empty($audioFile['base64']);
 
-        // ── Gemini accepts audio natively — no STT step needed ────────────────
+        // ── Gemini accepts audio natively, no STT step needed ────────────────
         if (!$hasAudio && empty($text)) return null;
 
         $history[] = ['role' => 'user', 'content' => $text ?? '[Voice message]'];
@@ -375,7 +375,7 @@ class AiAssistantService
                 );
             } catch (\RuntimeException $e) {
                 $msg = match ($e->getMessage()) {
-                    'VERTEX_QUOTA_EXCEEDED' => "I'm getting a lot of requests right now — please try again in a moment!",
+                    'VERTEX_QUOTA_EXCEEDED' => "I'm getting a lot of requests right now, please try again in a moment!",
                     'VERTEX_TIMEOUT'        => "That took too long on my end. Please try again!",
                     default                 => null,
                 };
@@ -450,7 +450,7 @@ class AiAssistantService
 
                     $routes = $this->executeTransitPlan($resolvedCoords['from'], $resolvedCoords['to'], $args['walkReluctance'] ?? 13.5);
 
-                    // Compact per-option summaries for the LLM — the full route
+                    // Compact per-option summaries for the LLM, the full route
                     // objects go straight to the app; narration only needs the gist.
                     $toolContent = !empty($routes)
                         ? json_encode([
@@ -525,8 +525,8 @@ class AiAssistantService
                         'success' => $saved,
                         'note'    => $memUser
                             ? ($saved
-                                ? 'Saved. Acknowledge this naturally and briefly — like a friend who just noted something down ("Got it", "I\'ll keep that in mind"). Do NOT say "I have saved" or "I have stored". Then continue the conversation.'
-                                : 'Already known — do not mention memory at all, just continue naturally.')
+                                ? 'Saved. Acknowledge this naturally and briefly, like a friend who just noted something down ("Got it", "I\'ll keep that in mind"). Do NOT say "I have saved" or "I have stored". Then continue the conversation.'
+                                : 'Already known, do not mention memory at all, just continue naturally.')
                             : 'User is not signed in so memory is unavailable. Do not mention this unless they ask why you don\'t remember them.',
                     ]);
                     break;
@@ -565,13 +565,13 @@ class AiAssistantService
 
         if (empty(trim($finalText))) {
             $finalText = match ($languageCode) {
-                'sw-KE' => "Maze, sijapata vizuri. Niambie tena — unataka nifanye nini hasa?",
-                'fr-FR' => "Hmm, je n'ai pas bien saisi. Pouvez-vous reformuler — qu'est-ce que vous cherchez exactement ?",
-                default => "Hmm, I didn't quite get that — could you say it a different way? I can help with routes, places, weather, and more.",
+                'sw-KE' => "Maze, sijapata vizuri. Niambie tena, unataka nifanye nini hasa?",
+                'fr-FR' => "Hmm, je n'ai pas bien saisi. Pouvez-vous reformuler, qu'est-ce que vous cherchez exactement ?",
+                default => "Hmm, I didn't quite get that, could you say it a different way? I can help with routes, places, weather, and more.",
             };
         }
 
-        // ── TTS — text → audio ─────────────────────────────────────────────────
+        // ── TTS, text → audio ─────────────────────────────────────────────────
         $audioData = $this->tts->synthesize(
             $finalText,
             (float) ($voiceSettings['speaking_rate'] ?? 1.05),

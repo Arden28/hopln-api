@@ -13,7 +13,7 @@ return new class extends Migration
             $table->string('external_ref', 255)->nullable()->comment('M-Pesa transaction reference');
             $table->decimal('amount_total', 12, 2);
 
-            // Wallet UUIDs — sacco is nullable (lengo mode or split_enabled=false)
+            // Wallet UUIDs, sacco is nullable (lengo mode or split_enabled=false)
             $table->uuid('vehicle_wallet_id')->nullable();
             $table->uuid('sacco_wallet_id')->nullable();
             $table->uuid('platform_wallet_id')->nullable();

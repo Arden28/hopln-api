@@ -63,12 +63,12 @@ This document is the single source of truth for deploying and operating the Hopl
 |---|---|---|---|
 | Passenger & Console API | Laravel 13 / PHP 8.3-FPM | Hetzner CPX32 | `hopln-api/` |
 | Reverse proxy + TLS | Caddy 2 | Same box | `hopln-api/Caddyfile` |
-| Database | PostgreSQL 16 + PostGIS 3.4 | Same box | — |
-| Cache / Queue / Session | Redis 7 | Same box | — |
+| Database | PostgreSQL 16 + PostGIS 3.4 | Same box |, |
+| Cache / Queue / Session | Redis 7 | Same box |, |
 | Transit routing engine | OpenTripPlanner 2.4 | Same box | `nairobi-otp/` |
 | Marketing website | Next.js 15 SSG | Cloudflare Pages | `website/` |
 | Operator console | Vite React SPA | Cloudflare Pages | `console/` |
-| Backups | Cloudflare R2 | — | — |
+| Backups | Cloudflare R2 |, |, |
 
 ---
 
@@ -107,9 +107,9 @@ The remaining 4.5 GB + 8 GB swap absorbs the OTP build spike (4 GB heap, ~10–1
 | 22 | SSH | Yes (restricted by key) |
 | 80 | Caddy HTTP → HTTPS redirect | Yes |
 | 443 | Caddy HTTPS | Yes |
-| 5432 | PostgreSQL | **No** — Docker internal |
-| 6379 | Redis | **No** — Docker internal |
-| 8080 | OTP | **No** — Docker internal |
+| 5432 | PostgreSQL | **No**, Docker internal |
+| 6379 | Redis | **No**, Docker internal |
+| 8080 | OTP | **No**, Docker internal |
 
 ---
 
@@ -122,7 +122,7 @@ The remaining 4.5 GB + 8 GB swap absorbs the OTP build spike (4 GB heap, ~10–1
 3. Note your: **Account ID**, **Access Key ID**, **Secret Access Key**
 4. These go into `.env` on the server as `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_ENDPOINT`
 
-### Pages — `navigo.co.ke` (website)
+### Pages, `navigo.co.ke` (website)
 
 1. Cloudflare Dashboard → Pages → **Create a project** → Connect Git
 2. Select the `website/` repository
@@ -132,7 +132,7 @@ The remaining 4.5 GB + 8 GB swap absorbs the OTP build spike (4 GB heap, ~10–1
    - `NEXT_PUBLIC_API_URL` = `https://api.navigo.co.ke`
    - `NEXT_PUBLIC_MAPBOX_TOKEN` = your Mapbox public token
 
-### Pages — `console.navigo.co.ke` (operator console)
+### Pages, `console.navigo.co.ke` (operator console)
 
 1. Pages → **Create a project** → Connect Git
 2. Select the `console/` repository
@@ -146,7 +146,7 @@ The remaining 4.5 GB + 8 GB swap absorbs the OTP build spike (4 GB heap, ~10–1
 1. Zero Trust → Access → **Applications** → Add an application → Self-hosted
 2. Application domain: `console.navigo.co.ke`
 3. Policy: Allow emails in `@navigo.co.ke` domain, or add individual email addresses
-4. This adds a login gate before the console SPA even loads — free for up to 50 users
+4. This adds a login gate before the console SPA even loads, free for up to 50 users
 
 ---
 
@@ -166,14 +166,14 @@ Add these in Cloudflare DNS for `navigo.co.ke`:
 
 ## 5. First-time server setup
 
-### Step 1 — Provision
+### Step 1, Provision
 
 On Hetzner Cloud Console:
 - Create server → CPX32 → Ubuntu 24.04 LTS
 - Add your local SSH public key during creation
 - Note the server's public IP
 
-### Step 2 — Initialize
+### Step 2, Initialize
 
 ```bash
 ssh root@<server-ip>
@@ -187,7 +187,7 @@ Or copy and run `hopln-api/scripts/setup-server.sh` manually. This script:
 - Creates `deploy` user (Docker group)
 - Creates `/opt/hopln/otp-data/` directory
 
-### Step 3 — Add GitHub Actions SSH key
+### Step 3, Add GitHub Actions SSH key
 
 On your local machine, generate a dedicated deploy key:
 
@@ -204,7 +204,7 @@ chown deploy:deploy /home/deploy/.ssh/authorized_keys
 
 Add `hopln_deploy_key` (private key contents) as `HETZNER_SSH_KEY` secret in GitHub (see §7).
 
-### Step 4 — Clone the API repo
+### Step 4, Clone the API repo
 
 ```bash
 su - deploy
@@ -212,7 +212,7 @@ git clone https://github.com/<org>/hopln-api.git /opt/hopln/api
 chmod +x /opt/hopln/api/scripts/*.sh
 ```
 
-### Step 5 — Seed OTP data
+### Step 5, Seed OTP data
 
 The OTP data directory must contain three files before the first start.
 
@@ -233,7 +233,7 @@ docker compose --profile build run --rm otp-build
 # Then SCP the resulting data/graph.obj to the server as above
 ```
 
-### Step 6 — Configure environment
+### Step 6, Configure environment
 
 ```bash
 cp /opt/hopln/api/.env.production /opt/hopln/api/.env
@@ -254,7 +254,7 @@ Required values to fill in:
 | `AWS_SECRET_ACCESS_KEY` | R2 API token (§3) |
 | `AWS_ENDPOINT` | `https://<account-id>.r2.cloudflarestorage.com` |
 
-### Step 7 — Configure rclone for R2
+### Step 7, Configure rclone for R2
 
 ```bash
 rclone config
@@ -274,7 +274,7 @@ ACL: (leave blank)
 
 Verify: `rclone ls r2:hopln-backups` (bucket must exist first, create it in §3).
 
-### Step 8 — Start all services
+### Step 8, Start all services
 
 ```bash
 cd /opt/hopln/api
@@ -287,7 +287,7 @@ docker compose -f docker-compose.prod.yml logs -f otp
 # Wait for: "Listening for connections on port 8080"
 ```
 
-### Step 9 — Database setup
+### Step 9, Database setup
 
 ```bash
 docker compose -f docker-compose.prod.yml exec app php artisan migrate --force
@@ -295,7 +295,7 @@ docker compose -f docker-compose.prod.yml exec app php artisan config:cache
 docker compose -f docker-compose.prod.yml exec app php artisan route:cache
 ```
 
-### Step 10 — Add backup cron
+### Step 10, Add backup cron
 
 ```bash
 crontab -e
@@ -303,7 +303,7 @@ crontab -e
 0 2 * * * /opt/hopln/api/scripts/backup.sh >> /var/log/hopln-backup.log 2>&1
 ```
 
-### Step 11 — Verify
+### Step 11, Verify
 
 ```bash
 # All containers running
@@ -330,14 +330,14 @@ OpenTripPlanner operates in two distinct modes:
 | `--build --save` | `otp-builder` | `-Xmx4G` | 5–10 min | Compile OSM + GTFS → `graph.obj` |
 | `--load` | `otp` | `-Xmx3G` | 60–120 s startup | Serve route queries from `graph.obj` |
 
-Building is CPU and memory intensive. Serving is lightweight — itinerary queries are CPU-bound graph traversals taking milliseconds on an already-loaded graph.
+Building is CPU and memory intensive. Serving is lightweight, itinerary queries are CPU-bound graph traversals taking milliseconds on an already-loaded graph.
 
 ### When to rebuild
 
 | Trigger | Who handles it |
 |---|---|
-| Route/stop/schedule change via console | Automatic — "Export & Sync" in GtfsPage calls `otp-rebuild.sh` |
-| New OSM extract (`kenya-latest.osm.pbf`) | Manual rebuild — needed only when major road infrastructure changes |
+| Route/stop/schedule change via console | Automatic, "Export & Sync" in GtfsPage calls `otp-rebuild.sh` |
+| New OSM extract (`kenya-latest.osm.pbf`) | Manual rebuild, needed only when major road infrastructure changes |
 | Fresh server deployment | Manual rebuild (or restore `graph.obj` from R2) |
 
 ### Automatic rebuild pipeline (console → OTP)
@@ -402,17 +402,17 @@ GitHub → Actions → **Deploy API** → **Run workflow** → Branch: `main` �
 ### What the deploy does
 
 1. SSH into server as `deploy` user
-2. `git pull origin main` — pull latest code
-3. `docker compose build app queue` — rebuild PHP image (bakes in new code + vendor)
-4. `docker compose up -d --no-deps app queue` — replace app containers only (postgres/redis/otp/caddy untouched — zero infrastructure downtime)
-5. `artisan migrate --force` — run any new migrations
+2. `git pull origin main`, pull latest code
+3. `docker compose build app queue`, rebuild PHP image (bakes in new code + vendor)
+4. `docker compose up -d --no-deps app queue`, replace app containers only (postgres/redis/otp/caddy untouched, zero infrastructure downtime)
+5. `artisan migrate --force`, run any new migrations
 6. Warm config / route / view caches
 
 **Deploy time**: ~2–4 minutes (dominated by Docker build).
 
 ### Cloudflare Pages (frontends)
 
-Both `website/` and `console/` deploy automatically via Cloudflare Pages' native GitHub integration — no Actions required. Every push to `main` triggers a production deploy. Every pull request gets a preview URL.
+Both `website/` and `console/` deploy automatically via Cloudflare Pages' native GitHub integration, no Actions required. Every push to `main` triggers a production deploy. Every pull request gets a preview URL.
 
 ---
 

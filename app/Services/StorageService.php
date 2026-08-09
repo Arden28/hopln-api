@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use RuntimeException;
 
 /**
- * StorageService — single entry point for all file storage in the application.
+ * StorageService, single entry point for all file storage in the application.
  *
  * Centralises three responsibilities that were previously scattered across every
  * controller that touched a file:
@@ -91,7 +91,7 @@ class StorageService
      *       → unlink() from the public directory
      *
      *   • External URL (Google, Apple OAuth avatars, etc.)
-     *       → skipped silently — we don't own those files
+     *       → skipped silently, we don't own those files
      *
      * Passing null or an empty string is intentionally a no-op, so callers can
      * skip the null guard:
@@ -132,9 +132,9 @@ class StorageService
         }
 
         // ── External / OAuth URL ─────────────────────────────────────────────────
-        // e.g. https://lh3.googleusercontent.com/... — not hosted by us, nothing to
+        // e.g. https://lh3.googleusercontent.com/..., not hosted by us, nothing to
         // delete. Log at debug level so it is visible when tracing file lifecycles.
-        Log::debug('StorageService::delete — skipping external URL.', ['url' => $url]);
+        Log::debug('StorageService::delete, skipping external URL.', ['url' => $url]);
     }
 
     // ── URL helpers ───────────────────────────────────────────────────────────────

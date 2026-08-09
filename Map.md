@@ -1,4 +1,4 @@
-# Map Screen — Full Technical Reference
+# Map Screen, Full Technical Reference
 
 > **Describes the current production code as of 2026-06.  
 > Primary file:** `hopln/app/(tabs)/map.tsx`  
@@ -43,7 +43,7 @@ map.tsx (root orchestrator)
 
 ## 2. Mapbox Layer Stack (bottom to top, inside MapboxMapView)
 
-### Layer 1 — Base Map
+### Layer 1, Base Map
 
 ```tsx
 <MapboxMapView
@@ -57,11 +57,11 @@ map.tsx (root orchestrator)
 ```
 
 Light style is a custom Mapbox Studio style URL (from env). Dark style is the standard Mapbox dark-v11.
-No POI suppression needed — Mapbox styles handle this via the Studio config.
+No POI suppression needed, Mapbox styles handle this via the Studio config.
 
 ---
 
-### Layer 2 — Offline Raster Tiles (conditional)
+### Layer 2, Offline Raster Tiles (conditional)
 
 ```tsx
 {!isOnline && offlinePack && (
@@ -80,7 +80,7 @@ filesystem via `file://` URL. Templates are defined in `services/offlineTiles.ts
 
 ---
 
-### Layer 3 — User Location Dot
+### Layer 3, User Location Dot
 
 ```tsx
 <UserLocation visible renderMode="normal" minDisplacement={2}>
@@ -97,12 +97,12 @@ the default blue dot. Uses two `CircleLayer` children:
 - **Inner dot:** 9 dp radius, Hopln orange (`#FF6F00`), 3 dp white border
 - **Pulse ring:** 18 dp radius, same orange at 15% opacity
 
-`minDisplacement={2}` — dot only re-renders on native side after ≥2 m movement. No custom
+`minDisplacement={2}`, dot only re-renders on native side after ≥2 m movement. No custom
 async projection needed; Mapbox handles synchronous dot positioning natively, with zero JS lag.
 
 ---
 
-### Layer 4 — RouteOverlay
+### Layer 4, RouteOverlay
 
 Rendered by `components/map/RouteOverlay.tsx`. Receives pre-computed data from `useRouteOverlay`.
 
@@ -122,7 +122,7 @@ Rendered by `components/map/RouteOverlay.tsx`. Receives pre-computed data from `
 
 **Active transit leg trimming:** During navigation, the active walk leg polyline is trimmed
 behind the user (coords up to the nearest projected point are removed), so the dashed grey line
-only extends forward — no visual "trail."
+only extends forward, no visual "trail."
 
 **`TrackedNodeMarker` pulse:** Uses `Animated.loop` with a scale 1→2.2→1 + opacity 1→0 cycle
 at 850 ms for the boarding stop. `tracksViewChanges` is `true` during animation (forces Mapbox
@@ -130,7 +130,7 @@ to re-read the view each frame), set to `false` once boarding is complete.
 
 ---
 
-### Layer 5 — StopsLayer (conditional: only when no activeJourney)
+### Layer 5, StopsLayer (conditional: only when no activeJourney)
 
 ```tsx
 {!activeJourney && (
@@ -155,7 +155,7 @@ with 24h AsyncStorage cache (stale-while-revalidate: cached paint first, then ba
 
 ---
 
-### Layer 6 — Dropped Pin (conditional)
+### Layer 6, Dropped Pin (conditional)
 
 ```tsx
 {longPressCoord && !activeJourney && (
@@ -184,7 +184,7 @@ Set on map long-press. Immediately shows "Dropped pin"; background async reverse
 ```
 
 Incident report pins rendered as React Native `<Pressable>` views positioned via
-`mapRef.current.getPointInView(coordinate)` — NOT as Mapbox markers. This avoids
+`mapRef.current.getPointInView(coordinate)`, NOT as Mapbox markers. This avoids
 Mapbox's PointAnnotation performance issues with many dynamically-clustered pins.
 
 **Projection trigger:** `map.tsx` calls `reportLayerRef.current?.project()` inside:
@@ -210,7 +210,7 @@ Cluster badge shows count (capped at "9+").
 | fare_hike | trending-up | `#30B050` |
 
 **Viewport report fetching:** Debounced 400 ms after `onRegionChangeComplete`. Latest-wins
-pattern via `reportReqId` ref (not state) — stale responses are discarded on arrival.
+pattern via `reportReqId` ref (not state), stale responses are discarded on arrival.
 Results are persisted to AsyncStorage (10 min TTL) so last-seen pins are painted instantly
 on the next app open.
 
@@ -232,7 +232,7 @@ const camera = useMapCamera(mapRef, cameraRef);
 ### Navigation Camera Interval (130 ms)
 
 Runs only when `navigating && followMe`. Skips when `isUserGesturingRef.current` is true
-(user is mid-pan/pinch — prevents camera fighting the gesture).
+(user is mid-pan/pinch, prevents camera fighting the gesture).
 
 **Full pipeline per tick:**
 
@@ -284,8 +284,8 @@ Runs only when `navigating && followMe`. Skips when `isUserGesturingRef.current`
 ```
 
 **Two heading modes (`headingUp` state):**
-- `false` (default) — north-up: camera heading always 0, map never rotates
-- `true` — heading-up: camera rotates to face direction of travel
+- `false` (default), north-up: camera heading always 0, map never rotates
+- `true`, heading-up: camera rotates to face direction of travel
 
 **Compass button cycles:**
 1. `!followMe` → `setFollowMe(true)` + north-up (re-lock)
@@ -364,7 +364,7 @@ if (result.status === 'off_route' && !reroutingRef.current) {
 ```
 
 `updateRoute()` in journeyStore does a cheap identity check (same `summary` + `total_distance`)
-before setting state — suppresses full re-renders when OTP returns the same route.
+before setting state, suppresses full re-renders when OTP returns the same route.
 
 ### Auto-start for AI-derived journeys
 
@@ -386,7 +386,7 @@ When Kwame (AI assistant) dispatches a journey, navigation starts automatically 
 
 ---
 
-## 6. NavigationEngine — Algorithm
+## 6. NavigationEngine, Algorithm
 
 ### Constructor pre-computation
 
@@ -427,11 +427,11 @@ When Kwame (AI assistant) dispatches a journey, navigation starts automatically 
 For each transit step, the engine tracks which intermediate stops have been passed
 (comparing hwm to each stop's precomputed polyline offset). `stopsRemaining` counts
 how many stops remain before the alighting point. `lastPassedStopName` is the most
-recently passed stop name — shown in the nav banner as "Passed: Nation Centre."
+recently passed stop name, shown in the nav banner as "Passed: Nation Centre."
 
 ---
 
-## 7. useRouteOverlay — Journey → Renderable Data
+## 7. useRouteOverlay, Journey → Renderable Data
 
 Called every render of map.tsx. Translates `activeJourney.route` into:
 
@@ -458,7 +458,7 @@ Called every render of map.tsx. Translates `activeJourney.route` into:
 
 ---
 
-## 8. UI Panels — Full Reference
+## 8. UI Panels, Full Reference
 
 ### MapFloatingUI
 
@@ -472,7 +472,7 @@ step, "then…" chip for next step preview, step ETA. Background color is dark/c
 Props consumed: `nextPreview`, `nextStep`, `distanceToNextStepM`, `stepEta`, `nextNextPreview`,
 `showNavSub` (from `prefs.navHints === 'detailed'`).
 
-**Walking sub-instruction:** Below the main banner when `navHints === 'detailed'` — shows the
+**Walking sub-instruction:** Below the main banner when `navHints === 'detailed'`, shows the
 `walkInstruction` (nearest upcoming turn within the current walk leg's sub-steps) and
 `walkDestination` (name of the boarding stop being walked to).
 
@@ -623,12 +623,12 @@ Bottom sheet shown when an unauthenticated user tries to save a journey. Prompts
 
 ---
 
-## 9. Zustand Stores — Map Screen Reads
+## 9. Zustand Stores, Map Screen Reads
 
 | Store | What map.tsx reads | Re-render impact |
 |---|---|---|
 | `journeyStore` | `activeJourney`, `tripStatus`, `setJourney`, `clearJourney`, `updateRoute` | Re-renders on journey change |
-| `headingStore` | `heading` via `getState()` (imperative only) | **Zero re-renders** — read only inside intervals |
+| `headingStore` | `heading` via `getState()` (imperative only) | **Zero re-renders**, read only inside intervals |
 | `mapLayersStore` | `layers.reports` | Re-renders on layer toggle |
 | `networkStore` | `isOnline` | Re-renders on connectivity change |
 | `offlineMapStore` | `pack` | Re-renders on pack change |
@@ -637,7 +637,7 @@ Bottom sheet shown when an unauthenticated user tries to save a journey. Prompts
 | `authStore` | `isAuthenticated` | Re-renders on auth state change |
 
 **Key design:** `headingStore` is read imperatively (`getState()`) inside the 130 ms camera
-interval. The compass updates 12 times per second — if it were a React selector, it would
+interval. The compass updates 12 times per second, if it were a React selector, it would
 cause 12 re-renders/second of the entire map screen. The imperative read gives zero overhead.
 
 ---
@@ -713,7 +713,7 @@ pressed "Start Navigation." This is separate from `IN_TRANSIT` because the user 
 
 ## 12. Complete Journey Flow (User Perspective)
 
-### Step 1 — Discover & Search
+### Step 1, Discover & Search
 - User opens the app → map screen loads, centered on Nairobi CBD (`DEFAULT_REGION`)
 - Stops layer paints from AsyncStorage cache instantly; background network refresh
 - User taps Search bar → `/search` screen opens
@@ -721,7 +721,7 @@ pressed "Start Navigation." This is separate from `IN_TRANSIT` because the user 
 - User selects from+to → `RouteService.calculateJourney()` called
 - Results returned → user selects a route → `useJourneyStore.setJourney(fromLoc, toLoc, route)` dispatched
 
-### Step 2 — Route Preview
+### Step 2, Route Preview
 - `activeJourney` becomes non-null
 - `useRouteOverlay` builds legs, markers, steps
 - `camera.fitCoordinates()` frames the full route with 80 dp padding
@@ -731,7 +731,7 @@ pressed "Start Navigation." This is separate from `IN_TRANSIT` because the user 
 - Boarding node pulses orange at first transit stop
 - `tripStatus` = `WAITING_FOR_BUS`
 
-### Step 3 — Walk to Stage
+### Step 3, Walk to Stage
 - User presses "Start Navigation" → `tripStatus` stays `WAITING_FOR_BUS`, `navStarted = true`
 - Camera locks to user, north-up by default, zoom 19
 - "Waiting for bus" banner shows boarding stop name
@@ -740,7 +740,7 @@ pressed "Start Navigation." This is separate from `IN_TRANSIT` because the user 
 - Voice guide announces instructions (respects `navHints` pref: off / concise / detailed)
 - Walk leg in RouteOverlay trims behind user as they walk
 
-### Step 4 — Board the Matatu
+### Step 4, Board the Matatu
 - User arrives at stage within 18 m of the boarding node
 - Engine advances step → "Board Line X" step becomes active
 - Boarding node pulse stops; `stopsRemaining` starts counting down
@@ -749,20 +749,20 @@ pressed "Start Navigation." This is separate from `IN_TRANSIT` because the user 
 - Banner shows: "Line 58 · 6 stops remaining · Next: Nation Centre"
 - `lastPassedStopName` updates as each intermediate stop is passed
 
-### Step 5 — Ride
+### Step 5, Ride
 - Speed-adaptive zoom follows vehicle speed (18.0 at 30 kph, down to 16.5 at 80 kph)
 - `headingUp` state controls whether map rotates to face direction of travel
 - Report pins visible if `layers.reports` is on; hazard pins auto-cluster at density
 - Intermediate stop dots fade as user passes them (past leg opacity 35%)
 - User can pinch-zoom without losing camera follow; pan disables follow
 
-### Step 6 — Alight
+### Step 6, Alight
 - Engine counts down `stopsRemaining` on each passed stop
 - At 2 stops remaining: alight warning fires ("Prepare to alight in 2 stops")
 - Step advances to "Alight at [stop]" → banner updates
 - User alights; if multi-leg route, engine transitions to next walk leg
 
-### Step 7 — Arrival
+### Step 7, Arrival
 - Engine returns `status === 'arrived'` when user is within 18 m of destination step
 - `tripStatus` = `ARRIVED`
 - Navigation stops, camera unlocks
@@ -770,7 +770,7 @@ pressed "Start Navigation." This is separate from `IN_TRANSIT` because the user 
 - Voice: "You have arrived at [destination name]"
 - JourneyDetailsSheet shows post-trip actions: rate, save, share
 
-### Step 8 — Clear Journey
+### Step 8, Clear Journey
 - User presses X or "Done" → `handleClearJourney()`:
   - `stopNavigation()`
   - `clearJourney()` → `activeJourney = null`, `tripStatus = IDLE`
@@ -788,7 +788,7 @@ pressed "Start Navigation." This is separate from `IN_TRANSIT` because the user 
 | Stop pins | Painted from AsyncStorage cache (24h TTL) |
 | Report pins | Painted from AsyncStorage cache (10 min TTL, last-seen) |
 | Route calculation | Fails with error (requires OTP on server) |
-| Navigation (ongoing) | Works fully — GPS, engine, and voice are all device-local |
+| Navigation (ongoing) | Works fully, GPS, engine, and voice are all device-local |
 | Save/unsave journey | Fails silently if not authenticated; auth requires network |
 
 `OfflineNotice` is shown when `!isOnline` with appropriate CTA based on auth state.
