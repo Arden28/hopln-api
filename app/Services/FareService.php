@@ -58,7 +58,7 @@ class FareService
     ): ?array {
         $confidence = null;
 
-        // Priority 1 — Route-level flat fare (most precise)
+        // Priority 1, Route-level flat fare (most precise)
         $rule = FareRule::where('route_id', $routeId)
             ->whereNull('origin_id')
             ->whereNull('destination_id')
@@ -68,7 +68,7 @@ class FareService
             $confidence = 'exact';
         }
 
-        // Priority 2 — Zone-pair fare
+        // Priority 2, Zone-pair fare
         $originZone = null;
         $destZone   = null;
         if (!$rule) {
@@ -89,7 +89,7 @@ class FareService
             }
         }
 
-        // Priority 3 — Zone + route combo
+        // Priority 3, Zone + route combo
         if (!$rule && $originZone) {
             $rule = FareRule::where('route_id', $routeId)
                 ->where(fn ($q) => $q
@@ -156,7 +156,7 @@ class FareService
     ): float {
         $now = now();
 
-        // Active modifiers cached as plain arrays — Eloquent objects must not be
+        // Active modifiers cached as plain arrays, Eloquent objects must not be
         // stored in the cache because PHP's unserialize() can fail with an
         // "incomplete object" error when OPcache or a fresh deploy hasn't fully
         // loaded the class definitions yet.

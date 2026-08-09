@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Hopln — restore from Cloudflare R2
+# Hopln, restore from Cloudflare R2
 #
 # Usage:
 #   ./scripts/restore.sh db                  # list DB dumps, prompt to restore one
@@ -26,8 +26,8 @@ set -a
 source "${APP_DIR}/.env"
 set +a
 
-command -v rclone &>/dev/null || die "rclone not found — run scripts/backup-setup.sh first"
-[ -f "${RCLONE_CONF}" ]       || die ".rclone.conf not found — run scripts/backup-setup.sh first"
+command -v rclone &>/dev/null || die "rclone not found, run scripts/backup-setup.sh first"
+[ -f "${RCLONE_CONF}" ]       || die ".rclone.conf not found, run scripts/backup-setup.sh first"
 
 RCLONE="rclone --config ${RCLONE_CONF} --stats 0 --log-level INFO"
 TARGET="${1:-}"

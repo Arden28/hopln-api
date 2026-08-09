@@ -53,7 +53,7 @@ class ConsoleGtfsController extends Controller
         // The job overwrites this with a longer TTL once it begins.
         Cache::put('otp:sync_status', 'running', now()->addMinutes(15));
 
-        // force: true bypasses the 30s debounce — this is an explicit operator action.
+        // force: true bypasses the 30s debounce, this is an explicit operator action.
         $this->scheduleOtpSync(delaySecs: 0, force: true);
 
         return response()->json(['message' => 'GTFS export and OTP sync queued.']);

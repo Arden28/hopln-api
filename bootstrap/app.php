@@ -39,7 +39,7 @@ return Application::configure(basePath: dirname(__DIR__))
         RateLimiter::for('auth', fn ($r) => Limit::perMinute(10)->by($r->ip()));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        // Sentry crash reporting — inert until the package is installed and
+        // Sentry crash reporting, inert until the package is installed and
         // SENTRY_LARAVEL_DSN is set. Guard with class_exists so the app boots
         // without composer require sentry/sentry-laravel.
         if (class_exists(\Sentry\Laravel\Integration::class)) {

@@ -8,11 +8,11 @@
 docker-compose*.yml
 Dockerfile
 
-# Secrets — never bake env files into the image
+# Secrets, never bake env files into the image
 .env
 .env.*
 
-# Dependencies — vendor is copied from the composer stage; node_modules not used in production
+# Dependencies, vendor is copied from the composer stage; node_modules not used in production
 vendor
 node_modules
 

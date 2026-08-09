@@ -8,7 +8,7 @@ return new class extends Migration
     /**
      * The console wrote status='declined' while the app and the original
      * schema use 'rejected'. Standardize on 'rejected' (the console keeps
-     * showing a "Declined" label — display only).
+     * showing a "Declined" label, display only).
      */
     public function up(): void
     {
@@ -17,6 +17,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        // One-way normalization — nothing sensible to restore.
+        // One-way normalization, nothing sensible to restore.
     }
 };

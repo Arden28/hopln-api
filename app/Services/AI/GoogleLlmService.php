@@ -28,11 +28,11 @@ class GoogleLlmService
      * When $audioFile is provided it is injected as an inlineData part in the last user turn,
      * letting Gemini transcribe and respond in one step (no separate STT call needed).
      *
-     * @param  array       $history       Neutral history — see buildContents() for supported shapes.
+     * @param  array       $history       Neutral history, see buildContents() for supported shapes.
      * @param  string      $systemPrompt  Full system instruction text.
      * @param  array       $tools         OpenAI-format tool declarations (converted internally).
      * @param  bool        $includeTools  Pass false on the narration turn to suppress function calling.
-     * @param  array|null  $audioFile     ['base64' => string, 'mime' => string] — optional voice input.
+     * @param  array|null  $audioFile     ['base64' => string, 'mime' => string], optional voice input.
      * @return array|null                 ['text' => string|null, 'functionCall' => ['name', 'args']|null]
      */
     public function chat(
@@ -49,7 +49,7 @@ class GoogleLlmService
 
         $contents = $this->buildContents($history, $audioFile);
         if (empty($contents)) {
-            Log::warning('Vertex AI: buildContents produced an empty array — skipping call.');
+            Log::warning('Vertex AI: buildContents produced an empty array, skipping call.');
             return null;
         }
 
@@ -121,7 +121,7 @@ class GoogleLlmService
             if (in_array($msg, ['VERTEX_QUOTA_EXCEEDED', 'VERTEX_TIMEOUT'], true)) {
                 throw $e;
             }
-            // Config / infrastructure errors (missing key file, no access_token) —
+            // Config / infrastructure errors (missing key file, no access_token),
             // log with detail and return null so the controller returns 503.
             Log::error('Vertex AI config/auth error: ' . $msg, ['trace' => $e->getTraceAsString()]);
             return null;
@@ -217,7 +217,7 @@ class GoogleLlmService
 
             $audioPart = ['inlineData' => ['mimeType' => $mime, 'data' => $audioFile['base64']]];
 
-            // Find the last user turn and replace its parts with just the audio —
+            // Find the last user turn and replace its parts with just the audio,
             // placeholder text like "[Voice message]" is noise; the system prompt is context enough.
             $lastIdx = count($contents) - 1;
             while ($lastIdx >= 0 && $contents[$lastIdx]['role'] !== 'user') {

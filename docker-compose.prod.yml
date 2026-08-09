@@ -1,7 +1,7 @@
 version: "3.9"
 
 # Production stack for Hetzner CPX32.
-# All service ports are internal — only Caddy exposes 80/443.
+# All service ports are internal, only Caddy exposes 80/443.
 # OTP data is bind-mounted from /opt/hopln/otp-data on the host.
 
 services:
@@ -86,7 +86,7 @@ services:
     restart: unless-stopped
     networks:
       - hopln_net
-    # No ports exposed — only accessible within hopln_net
+    # No ports exposed, only accessible within hopln_net
 
   # ── pgAdmin ───────────────────────────────────────────────────────────────
   pgadmin:
@@ -131,7 +131,7 @@ services:
     restart: unless-stopped
     networks:
       - hopln_net
-    # No ports exposed — only accessible within hopln_net
+    # No ports exposed, only accessible within hopln_net
 
   # ── OpenTripPlanner (serve) ───────────────────────────────────────────────
   otp:
@@ -145,7 +145,7 @@ services:
     restart: unless-stopped
     networks:
       - hopln_net
-    # No ports exposed — Laravel reaches otp:8080 internally
+    # No ports exposed, Laravel reaches otp:8080 internally
 
   # ── OpenTripPlanner (graph builder, on-demand) ────────────────────────────
   otp-builder:

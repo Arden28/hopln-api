@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Hopln — production backup to Cloudflare R2
+# Hopln, production backup to Cloudflare R2
 # Backs up: PostgreSQL database · OTP graph.obj · Laravel storage/app · .env
 #
 # Cron (as deploy user, daily at 02:00):
@@ -35,7 +35,7 @@ source "${APP_DIR}/.env"
 set +a
 
 # Require rclone
-command -v rclone &>/dev/null || die "rclone not found — run scripts/backup-setup.sh first"
+command -v rclone &>/dev/null || die "rclone not found, run scripts/backup-setup.sh first"
 
 # Auto-generate rclone config from .env on first run (or if it was deleted)
 if [ ! -f "${RCLONE_CONF}" ]; then
@@ -55,7 +55,7 @@ fi
 
 RCLONE="rclone --config ${RCLONE_CONF} --stats 0 --log-level INFO"
 
-# Temp file registry — all cleaned up on exit regardless of success/failure
+# Temp file registry, all cleaned up on exit regardless of success/failure
 TMP_FILES=()
 cleanup() { for f in "${TMP_FILES[@]:-}"; do [ -f "$f" ] && rm -f "$f"; done; }
 trap cleanup EXIT
@@ -71,7 +71,7 @@ ${COMPOSE} exec -T -e PGPASSWORD="${DB_PASSWORD}" postgres \
   | gzip > "${DUMP_FILE}"
 
 # Abort if the dump is empty (pg_dump silent failure)
-[ -s "${DUMP_FILE}" ] || die "pg_dump produced an empty file — check postgres container logs"
+[ -s "${DUMP_FILE}" ] || die "pg_dump produced an empty file, check postgres container logs"
 
 DUMP_SIZE=$(du -sh "${DUMP_FILE}" | cut -f1)
 log "Dump complete: ${DUMP_SIZE}"
@@ -93,7 +93,7 @@ if [ -f "${OTP_GRAPH}" ]; then
   ${RCLONE} delete "${BACKUP_BUCKET}/otp/" --min-age ${KEEP_GRAPH_DAYS}d
   log "Rotated OTP graph backups older than ${KEEP_GRAPH_DAYS} days"
 else
-  log "WARNING: graph.obj not found at ${OTP_GRAPH} — skipping (OTP may not have built yet)"
+  log "WARNING: graph.obj not found at ${OTP_GRAPH}, skipping (OTP may not have built yet)"
 fi
 
 # ── 3. Laravel storage/app ────────────────────────────────────────────────────
@@ -114,7 +114,7 @@ if [ -d "${STORAGE_DIR}" ]; then
   ${RCLONE} delete "${BACKUP_BUCKET}/storage/" --min-age ${KEEP_STORAGE_DAYS}d
   log "Rotated storage archives older than ${KEEP_STORAGE_DAYS} days"
 else
-  log "WARNING: ${STORAGE_DIR} not found — skipping"
+  log "WARNING: ${STORAGE_DIR} not found, skipping"
 fi
 
 # ── 4. .env ───────────────────────────────────────────────────────────────────

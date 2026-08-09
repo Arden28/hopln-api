@@ -32,7 +32,7 @@ class ImportService
      *
      * @param  string   $tempId     Returned by storeTempFile()
      * @param  array    $columnMap  [ 'CSV Header Label' => 'field_name', ... ]  (order matches file columns)
-     * @param  Closure  $validator  fn(array $row): string[]  — empty = valid row
+     * @param  Closure  $validator  fn(array $row): string[] , empty = valid row
      * @return array{temp_id: string, rows: list<array>, total: int, valid_count: int, error_count: int}
      */
     public function preview(string $tempId, array $columnMap, Closure $validator): array
@@ -72,7 +72,7 @@ class ImportService
      * Deletes the temp file on completion regardless of outcome.
      *
      * @param  Closure  $validator  Same closure as preview()
-     * @param  Closure  $creator    fn(array $row): void — throws on failure
+     * @param  Closure  $creator    fn(array $row): void, throws on failure
      * @return array{imported: int, failed: int, errors: list<array{row: int, message: string}>}
      */
     public function confirm(string $tempId, array $columnMap, Closure $validator, Closure $creator): array

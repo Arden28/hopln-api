@@ -72,7 +72,7 @@ class AiTransitController extends Controller
             );
 
             if (!$result) {
-                // Could be OTP down or AI parsing failure — surface a clear message either way.
+                // Could be OTP down or AI parsing failure, surface a clear message either way.
                 return response()->json([
                     'message' => 'Route planning is temporarily unavailable. Please try again in a moment.',
                     'code'    => 'OTP_UNAVAILABLE',

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Hopln — Hetzner CPX32 initial server setup
+# Hopln, Hetzner CPX32 initial server setup
 # OS: Ubuntu 24.04 LTS
 # Run once as root immediately after provisioning.
 # Usage: bash setup-server.sh
@@ -8,7 +8,7 @@ set -euo pipefail
 
 echo ""
 echo "╔══════════════════════════════════════╗"
-echo "║  Hopln server setup — Ubuntu 24.04  ║"
+echo "║  Hopln server setup, Ubuntu 24.04  ║"
 echo "╚══════════════════════════════════════╝"
 echo ""
 

@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Log;
  *
  * Every method returns plain arrays shaped for two consumers at once:
  * a compact form for the LLM tool-result turn, and a richer form the app
- * renders as cards. Keep payloads small — they ride inside the LLM context.
+ * renders as cards. Keep payloads small, they ride inside the LLM context.
  */
 class KwameToolsService
 {
@@ -39,7 +39,7 @@ class KwameToolsService
     {
         $apiKey = $this->mapsKey();
         if (empty($apiKey)) {
-            Log::warning('KwameTools: GOOGLE_MAPS_API_KEY missing — find_places disabled.');
+            Log::warning('KwameTools: GOOGLE_MAPS_API_KEY missing, find_places disabled.');
             return [];
         }
 
@@ -55,7 +55,7 @@ class KwameToolsService
             $places = $this->searchPlacesLegacy($query, $biasLat, $biasLng, $limit, $apiKey);
         }
 
-        // Never cache misses — a temporary API hiccup shouldn't block results for an hour.
+        // Never cache misses, a temporary API hiccup shouldn't block results for an hour.
         if (!empty($places)) {
             Cache::put($cacheKey, $places, self::PLACES_CACHE_TTL);
         }
@@ -63,7 +63,7 @@ class KwameToolsService
         return $places;
     }
 
-    /** Places API (New) — richer data when the key has it enabled. */
+    /** Places API (New), richer data when the key has it enabled. */
     private function searchPlacesV1(string $query, float $biasLat, float $biasLng, int $limit, string $apiKey): array
     {
         try {
@@ -94,7 +94,7 @@ class KwameToolsService
                 ]);
 
             if (!$response->successful()) {
-                Log::warning('KwameTools: Places (New) error — will try legacy API', [
+                Log::warning('KwameTools: Places (New) error, will try legacy API', [
                     'status' => $response->status(),
                     'body'   => $response->json(),
                 ]);
@@ -121,7 +121,7 @@ class KwameToolsService
         }
     }
 
-    /** Legacy Places Text Search — same key as classic Geocoding. */
+    /** Legacy Places Text Search, same key as classic Geocoding. */
     private function searchPlacesLegacy(string $query, float $biasLat, float $biasLng, int $limit, string $apiKey): array
     {
         try {

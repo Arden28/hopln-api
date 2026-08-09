@@ -117,7 +117,7 @@ class OAuthController extends Controller
 
     private function respondWithTokenOrPhoneSetup(User $user): JsonResponse
     {
-        // [PHONE VERIFICATION DISABLED] — uncomment block below to restore
+        // [PHONE VERIFICATION DISABLED], uncomment block below to restore
         // if (!$user->isPhoneVerified()) {
         //     $setupToken = $user->createToken('setup', ['phone:verify'], now()->addMinutes(10))->plainTextToken;
         //     return response()->json(['needs_phone' => true, 'setup_token' => $setupToken, 'phone' => $user->phone_number]);

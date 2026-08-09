@@ -133,7 +133,7 @@ Route::prefix('v1')->group(function () {
     Route::post('/reports',            [ReportController::class, 'store']);
     Route::post('/reports/{id}/vote',  [ReportController::class, 'vote']);
 
-    // ── [DEBUG] SMS test — REMOVE before going live ────────────────
+    // ── [DEBUG] SMS test, REMOVE before going live ────────────────
     Route::get('/debug/sms', function () {
         $sandbox  = (bool) config('services.africastalking.sandbox');
         $apiKey   = config('services.africastalking.api_key', '');
@@ -152,7 +152,7 @@ Route::prefix('v1')->group(function () {
         ];
 
         if (empty($apiKey)) {
-            return response()->json(['error' => 'API key is empty — check AT_API_KEY in .env', 'config' => $config], 500);
+            return response()->json(['error' => 'API key is empty, check AT_API_KEY in .env', 'config' => $config], 500);
         }
 
         try {

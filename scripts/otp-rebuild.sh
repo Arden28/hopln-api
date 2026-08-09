@@ -32,13 +32,13 @@ echo "[otp-rebuild] Building graph (this may take 5–10 minutes)"
 BUILD_START=$(date +%s)
 
 if ! ${COMPOSE} --profile build run --rm otp-builder; then
-  echo "[otp-rebuild] ERROR: Builder failed — restoring backup graph"
+  echo "[otp-rebuild] ERROR: Builder failed, restoring backup graph"
   if [ -f "${GRAPH_BAK}" ]; then
     cp "${GRAPH_BAK}" "${GRAPH}"
     ${COMPOSE} up -d otp
     echo "[otp-rebuild] Restored graph.obj.bak and restarted OTP"
   else
-    echo "[otp-rebuild] No backup available — OTP will remain stopped"
+    echo "[otp-rebuild] No backup available, OTP will remain stopped"
   fi
   exit 1
 fi
@@ -50,4 +50,4 @@ echo "[otp-rebuild] Build completed in $(( BUILD_END - BUILD_START ))s"
 echo "[otp-rebuild] Starting OTP serve container"
 ${COMPOSE} up -d otp
 
-echo "[otp-rebuild] ── Rebuild complete — OTP starting up ──────"
+echo "[otp-rebuild] ── Rebuild complete, OTP starting up ──────"

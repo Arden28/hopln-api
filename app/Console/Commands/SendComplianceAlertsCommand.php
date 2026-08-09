@@ -108,7 +108,7 @@ class SendComplianceAlertsCommand extends Command
         }
 
         $summary = collect($alerts)
-            ->map(fn ($a) => ($a['days_left'] < 0 ? '[EXPIRED] ' : "[{$a['days_left']}d] ") . "{$a['entity']} — {$a['document']}")
+            ->map(fn ($a) => ($a['days_left'] < 0 ? '[EXPIRED] ' : "[{$a['days_left']}d] ") . "{$a['entity']}, {$a['document']}")
             ->join("\n");
 
         DB::table('notifications')->insert([

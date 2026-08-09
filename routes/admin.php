@@ -311,7 +311,7 @@ Route::prefix('v1/console')
         Route::patch('network/pathways/{id}',  [ConsoleInteropController::class, 'updatePathway'])->middleware('role:interop.edit');
         Route::delete('network/pathways/{id}', [ConsoleInteropController::class, 'destroyPathway'])->middleware('role:interop.edit');
 
-        // ── Fleet — Vehicles & Drivers ────────────────────────────────────────
+        // ── Fleet, Vehicles & Drivers ────────────────────────────────────────
         Route::get('vehicles',                       [ConsoleVehicleController::class, 'index']);
         Route::post('vehicles',                      [ConsoleVehicleController::class, 'store'])->middleware('role:fleet.edit');
         Route::get('vehicles/import/sample',         [ConsoleVehicleController::class, 'importSample'])->middleware('role:fleet.edit');
@@ -339,13 +339,13 @@ Route::prefix('v1/console')
         Route::patch('drivers/{id}',   [ConsoleDriverController::class, 'update'])->middleware('role:fleet.edit');
         Route::delete('drivers/{id}',  [ConsoleDriverController::class, 'destroy'])->middleware('role:fleet.edit');
 
-        // ── Fleet — Conductors ────────────────────────────────────────────────
+        // ── Fleet, Conductors ────────────────────────────────────────────────
         Route::get('conductors',          [ConductorController::class, 'index']);
         Route::post('conductors',         [ConductorController::class, 'store'])->middleware('role:fleet.edit');
         Route::patch('conductors/{id}',   [ConductorController::class, 'update'])->middleware('role:fleet.edit');
         Route::delete('conductors/{id}',  [ConductorController::class, 'destroy'])->middleware('role:fleet.edit');
 
-        // ── Fleet — Shifts ────────────────────────────────────────────────────
+        // ── Fleet, Shifts ────────────────────────────────────────────────────
         Route::get('shifts/uncovered',    [ConsoleShiftController::class, 'uncovered']);
         Route::get('shifts',              [ConsoleShiftController::class, 'index']);
         Route::post('shifts',             [ConsoleShiftController::class, 'store'])->middleware('role:fleet.edit');

@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Log;
  * derived from journey logs, and preferences the user has stated in chat
  * (captured via the remember_preference tool).
  *
- * buildMemoryBlock() renders the compact prompt section; keep it small —
+ * buildMemoryBlock() renders the compact prompt section; keep it small,
  * it rides inside every LLM request for authenticated users.
  */
 class KwameMemoryService
@@ -26,7 +26,7 @@ class KwameMemoryService
     {
         $lines = [];
 
-        // Saved pins — the highest-signal facts.
+        // Saved pins, the highest-signal facts.
         $pins = SavedPlace::where('user_id', $user->id)
             ->whereIn('pin', ['home', 'work'])
             ->get(['name', 'pin']);
@@ -72,7 +72,7 @@ class KwameMemoryService
 
         if (empty($lines)) return null;
 
-        return "WHAT YOU KNOW ABOUT THIS USER (persistent memory — apply silently, don't recite):\n"
+        return "WHAT YOU KNOW ABOUT THIS USER (persistent memory, apply silently, don't recite):\n"
             . implode("\n", $lines);
     }
 

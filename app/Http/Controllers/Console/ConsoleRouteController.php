@@ -246,7 +246,7 @@ class ConsoleRouteController extends Controller
             'stops.*.arrival_time'   => ['required', 'string', 'regex:/^\d{1,2}:\d{2}:\d{2}$/'],
             'stops.*.departure_time' => ['required', 'string', 'regex:/^\d{1,2}:\d{2}:\d{2}$/'],
             'headsign'               => 'nullable|string|max:100',
-            // shape_id is intentionally NOT accepted here — shapes are managed exclusively
+            // shape_id is intentionally NOT accepted here, shapes are managed exclusively
             // through the saveShape() endpoint so they are never silently overwritten.
         ]);
 

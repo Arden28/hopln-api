@@ -32,14 +32,14 @@ class ReportController extends Controller
 
     /**
      * Store a new crowdsourced report and broadcast it.
-     * Route is public — user_id is nullable so guests can also report.
+     * Route is public, user_id is nullable so guests can also report.
      */
     public function store(StoreTransitReportRequest $request): JsonResponse
     {
         try {
             $data        = $request->validated();
             // This route is public (guests can report), so $request->user() returns
-            // null even when a Sanctum Bearer token is present — it falls through to
+            // null even when a Sanctum Bearer token is present, it falls through to
             // the session guard. auth('sanctum')->user() resolves the token explicitly.
             $authUser    = auth('sanctum')->user();
             $data['user_id']      = $authUser?->id;
@@ -75,7 +75,7 @@ class ReportController extends Controller
 
     /**
      * Cast or toggle a vote (up/down) on a report.
-     * Public route — authenticated users are identified by session,
+     * Public route, authenticated users are identified by session,
      * guests by a SHA-256 hash of their IP address.
      */
     public function vote(Request $request, string $id): JsonResponse

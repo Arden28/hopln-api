@@ -103,15 +103,15 @@ class ReportService
         }
 
         $ttlMinutes = match ($data['type']) {
-            'accident'      => 120,  // 2 h — collisions take time to clear
-            'flooded_route' => 180,  // 3 h — drainage is slow
+            'accident'      => 120,  // 2 h, collisions take time to clear
+            'flooded_route' => 180,  // 3 h, drainage is slow
             'road_blocked'  => 90,   // 1.5 h
-            'breakdown'     => 60,   // 1 h — average tow wait
-            'police_check'  => 60,   // 1 h — checkpoints move
-            'security'      => 45,   // 45 min — volatile situations
-            'traffic_jam'   => 45,   // 45 min — jams dissipate
-            'stage_queue'   => 30,   // 30 min — queues clear quickly
-            'fare_hike'     => 480,  // 8 h — fares stay high all day
+            'breakdown'     => 60,   // 1 h, average tow wait
+            'police_check'  => 60,   // 1 h, checkpoints move
+            'security'      => 45,   // 45 min, volatile situations
+            'traffic_jam'   => 45,   // 45 min, jams dissipate
+            'stage_queue'   => 30,   // 30 min, queues clear quickly
+            'fare_hike'     => 480,  // 8 h, fares stay high all day
             default         => 60,
         };
 
@@ -199,7 +199,7 @@ class ReportService
                 $report->user_id,
                 'points_earned',
                 'Your report is trending! 🔥',
-                '5 people confirmed your report — +5 Safiri Points',
+                '5 people confirmed your report, +5 Safiri Points',
                 ['screen' => '/(tabs)/map'],
             )->onQueue('default');
         }

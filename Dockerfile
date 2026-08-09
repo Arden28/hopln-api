@@ -53,7 +53,7 @@ RUN apk add --no-cache --virtual .build-deps \
  && apk del .build-deps \
  && rm -rf /tmp/pear /var/cache/apk/*
 
-# OPcache — production settings (no file-change polling)
+# OPcache, production settings (no file-change polling)
 RUN { \
       echo 'opcache.enable=1'; \
       echo 'opcache.memory_consumption=128'; \
@@ -64,7 +64,7 @@ RUN { \
       echo 'opcache.save_comments=1'; \
     } > /usr/local/etc/php/conf.d/opcache.ini
 
-# PHP-FPM pool — dynamic, 10 workers max (sufficient for current traffic)
+# PHP-FPM pool, dynamic, 10 workers max (sufficient for current traffic)
 RUN { \
       echo '[www]'; \
       echo 'pm = dynamic'; \
