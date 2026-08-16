@@ -47,14 +47,14 @@ provider = Cloudflare
 access_key_id = ${CLOUDFLARE_R2_ACCESS_KEY_ID}
 secret_access_key = ${CLOUDFLARE_R2_SECRET_ACCESS_KEY}
 endpoint = ${CLOUDFLARE_R2_ENDPOINT}
-acl = private
 no_check_bucket = true
-disable_checksum= true
+disable_checksum = true
 EOF
   chmod 600 "${RCLONE_CONF}"
 fi
 
-RCLONE="rclone --config ${RCLONE_CONF} --stats 0 --log-level INFO"
+RCLONE="rclone --config ${RCLONE_CONF} --stats 0 --log-level INFO --s3-no-check-bucket"
+
 
 # Temp file registry, all cleaned up on exit regardless of success/failure
 TMP_FILES=()
