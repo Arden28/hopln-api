@@ -53,8 +53,8 @@ EOF
   chmod 600 "${RCLONE_CONF}"
 fi
 
-RCLONE="rclone --config ${RCLONE_CONF} --stats 0 --log-level INFO --s3-no-check-bucket"
-
+# R2 Compatibility Optimization: Global engine overrides applied via variables
+RCLONE="rclone --config ${RCLONE_CONF} --stats 0 --log-level INFO --s3-no-check-bucket --s3-no-head-object --s3-disable-checksum"
 
 # Temp file registry, all cleaned up on exit regardless of success/failure
 TMP_FILES=()
@@ -77,7 +77,7 @@ ${COMPOSE} exec -T -e PGPASSWORD="${DB_PASSWORD}" postgres \
 DUMP_SIZE=$(du -sh "${DUMP_FILE}" | cut -f1)
 log "Dump complete: ${DUMP_SIZE}"
 
-${RCLONE} copy "${DUMP_FILE}" "${BACKUP_BUCKET}/postgres/"
+${RCLONE} copyto "${DUMP_FILE}" "${BACKUP_BUCKET}/postgres/hopln_pg_${TIMESTAMP}.sql.gz"
 log "Uploaded → ${BACKUP_BUCKET}/postgres/hopln_pg_${TIMESTAMP}.sql.gz"
 
 ${RCLONE} delete "${BACKUP_BUCKET}/postgres/" --min-age ${KEEP_DB_DAYS}d
@@ -89,7 +89,6 @@ if [ -f "${OTP_GRAPH}" ]; then
   GRAPH_DEST="graph_${TIMESTAMP}.obj"
   log "Uploading OTP graph (${GRAPH_SIZE}) → ${BACKUP_BUCKET}/otp/${GRAPH_DEST}"
 
-  # copyto (not copy) so the destination filename includes the timestamp
   ${RCLONE} copyto "${OTP_GRAPH}" "${BACKUP_BUCKET}/otp/${GRAPH_DEST}"
   ${RCLONE} delete "${BACKUP_BUCKET}/otp/" --min-age ${KEEP_GRAPH_DAYS}d
   log "Rotated OTP graph backups older than ${KEEP_GRAPH_DAYS} days"
@@ -109,7 +108,7 @@ if [ -d "${STORAGE_DIR}" ]; then
   STORAGE_SIZE=$(du -sh "${STORAGE_FILE}" | cut -f1)
   log "Storage archive: ${STORAGE_SIZE}"
 
-  ${RCLONE} copy "${STORAGE_FILE}" "${BACKUP_BUCKET}/storage/"
+  ${RCLONE} copyto "${STORAGE_FILE}" "${BACKUP_BUCKET}/storage/hopln_storage_${TIMESTAMP}.tar.gz"
   log "Uploaded → ${BACKUP_BUCKET}/storage/hopln_storage_${TIMESTAMP}.tar.gz"
 
   ${RCLONE} delete "${BACKUP_BUCKET}/storage/" --min-age ${KEEP_STORAGE_DAYS}d
