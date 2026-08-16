@@ -90,7 +90,16 @@ if [ -f "${OTP_GRAPH}" ]; then
   log "Uploading OTP graph (${GRAPH_SIZE}) → ${BACKUP_BUCKET}/otp/${GRAPH_DEST}"
 
   ${RCLONE} copyto "${OTP_GRAPH}" "${BACKUP_BUCKET}/otp/${GRAPH_DEST}"
-  ${RCLONE} delete "${BACKUP_BUCKET}/otp/" --min-age ${KEEP_GRAPH_DAYS}d
+    # Rotation sécurisée par nom de fichier pour contourner le bug d'âge de Cloudflare R2
+  # Trie les sauvegardes par ordre alphabétique (donc chronologique) et supprime les plus anciennes si on dépasse la limite
+  log "Safe rotating OTP graphs..."
+  ${RCLONE} lsf "${BACKUP_BUCKET}/otp/" | sort | head -n -${KEEP_GRAPH_DAYS} | while read -r old_file; do
+    if [ -n "$old_file" ]; then
+      log "Removing old graph: $old_file"
+      ${RCLONE} deletefile "${BACKUP_BUCKET}/otp/$old_file"
+    fi
+  done
+
   log "Rotated OTP graph backups older than ${KEEP_GRAPH_DAYS} days"
 else
   log "WARNING: graph.obj not found at ${OTP_GRAPH}, skipping (OTP may not have built yet)"
