@@ -49,6 +49,7 @@ secret_access_key = ${CLOUDFLARE_R2_SECRET_ACCESS_KEY}
 endpoint = ${CLOUDFLARE_R2_ENDPOINT}
 acl = private
 no_check_bucket = true
+disable_checksum= true
 EOF
   chmod 600 "${RCLONE_CONF}"
 fi
