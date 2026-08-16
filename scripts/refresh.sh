@@ -9,7 +9,7 @@ echo "Starting near-zero downtime refresh of the Navigo API stack..."
 
 # 1. Build the new images BEFORE stopping the old ones
 echo "Step 1: Rebuilding the app and queue images (The live app is STILL ONLINE)..."
-docker compose -f docker-compose.prod.yml build app queue
+docker compose -f docker-compose.prod.yml build --no-cache app queue
 
 # 2. Docker cleanly swaps the old containers for the new ones
 echo "Step 2: Swapping containers (Expected downtime: ~2 seconds)..."
